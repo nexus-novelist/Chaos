@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage.Packages.Knit)
 local Utils = require(ReplicatedStorage.Shared.utils)
@@ -6,6 +7,7 @@ local TeamService = Knit.CreateService({
 	Name = "TeamService",
 	Client = {
 		TeamChanged = Knit.CreateSignal(),
+		BlindPlayer = Knit.CreateSignal(),
 	},
 })
 
@@ -21,7 +23,7 @@ function TeamService:KnitInit()
 end
 
 function TeamService:InitPlayer(player: Player)
-	table.insert(self.players, { [player] = { Team = self.teams[3] } })
+	table.insert(self.players, { [player] = { Team = self.teams[3], ShotsLeft = 0 } })
 end
 
 function TeamService:DeinitPlayer(player: Player)
@@ -37,22 +39,36 @@ end
 
 function TeamService:SetPlayerTeam(player: Player, newTeam)
 	local index = Utils.findPlayerInTable(player, self.players)
+	local shots = (newTeam == "Murderrers" or newTeam == 0) and 2 or 0
 	if type(newTeam) == "string" then
-		self.players[index] = { [player] = { Team = newTeam } }
+		self.players[index][player] = { Team = newTeam, ShotsLeft = shots }
 		self.Client.TeamChanged:Fire(player, newTeam)
 	else
-		self.players[index] = { [player] = { Team = self.teams[newTeam] } }
+		self.players[index][player] = { Team = self.teams[newTeam], ShotsLeft = shots }
 		self.Client.TeamChanged:Fire(player, self.teams[newTeam])
 	end
 end
 
 function TeamService:ShootCharacter(player: Player, victim)
 	local playerTeam = TeamService:GetPlayerTeam(player)
+	assert(player.Character, "Player's character is nil")
 	assert(playerTeam == "Murderrers" or playerTeam == "Sheriffs", "Attempted shooting without gun!")
 	assert(victim, "Victim is nil!")
 	local victimHumanoid = victim:FindFirstChildWhichIsA("Humanoid")
 	if victimHumanoid then
 		victimHumanoid.Health = 0
+		if not Players:GetPlayerFromCharacter(victim) then
+			if playerTeam == "Murderrers" then
+				if self.players[Utils.findPlayerInTable(player, self.players)][player].ShotsLeft == 0 then
+					player.Character.Humanoid.Health = 0
+				else
+					self.players[Utils.findPlayerInTable(player, self.players)][player].ShotsLeft -= 1
+					self.Client.BlindPlayer:Fire(player)
+				end
+			else
+				player.Character.Humanoid.Health = 0
+			end
+		end
 	end
 end
 

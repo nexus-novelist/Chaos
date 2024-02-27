@@ -28,6 +28,10 @@ function TeamController:KnitStart()
 		TeamController:TeamChanged(newTeam)
 	end)
 
+	TeamService.BlindPlayer:Connect(function()
+		print("Blinded")
+	end)
+
 	Mouse.LeftDown:Connect(function()
 		if self.highlight.Parent then
 			TeamService:ShootCharacter(self.highlight.Parent)
