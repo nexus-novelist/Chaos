@@ -8,7 +8,10 @@
         "$path": "src/shared"
       },
       "Packages": {
-        "$path": "Packages"
+        "$path": "Packages",
+        "Roact": {
+          "$path": "roact"
+        }
       }
     },
 

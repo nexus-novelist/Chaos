@@ -23,6 +23,8 @@ function TeamController:KnitStart()
 	self.rayParams.FilterType = Enum.RaycastFilterType.Exclude
 
 	self.highlight = Instance.new("Highlight")
+	self.highlight.DepthMode = Enum.HighlightDepthMode.Occluded
+	self.highlight.FillTransparency = 1
 
 	TeamService.TeamChanged:Connect(function(newTeam)
 		TeamController:TeamChanged(newTeam)
