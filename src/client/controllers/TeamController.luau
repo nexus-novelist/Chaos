@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
 local TeamController = Knit.CreateController({
@@ -6,7 +7,17 @@ local TeamController = Knit.CreateController({
 })
 
 function TeamController:KnitInit()
-	print(TeamController.Name .. " initialized")
+	local TeamService = Knit.GetService("TeamService")
+	self.team = "Spectators"
+
+	TeamService.TeamChanged:Connect(function(newTeam)
+		TeamController:TeamChanged(newTeam)
+	end)
+end
+
+function TeamController:TeamChanged(newTeam)
+	self.team = newTeam
+	print("Now part of " .. newTeam .. " team!")
 end
 
 return TeamController

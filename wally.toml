@@ -6,3 +6,5 @@ realm = "shared"
 
 [dependencies]
 Knit = "sleitnick/knit@^1.7"
+Component = "sleitnick/component@^2.4.8"
+Promise = "evaera/promise@^4.0.0"

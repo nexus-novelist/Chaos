@@ -14,6 +14,8 @@ Knit.Start()
 function InitPlayer(player: Player)
 	local TeamService = Knit.GetService("TeamService")
 	TeamService:InitPlayer(player)
+	task.wait(5)
+	TeamService:SetPlayerTeam(player, 0)
 end
 
 function DeinitPlayer(player: Player)
