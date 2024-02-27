@@ -10,7 +10,7 @@ dependencies = []
 [[package]]
 name = "nexus-novelist/chaos"
 version = "0.1.0"
-dependencies = [["Component", "sleitnick/component@2.4.8"], ["Knit", "sleitnick/knit@1.7.0"], ["Promise", "evaera/promise@4.0.0"]]
+dependencies = [["Component", "sleitnick/component@2.4.8"], ["Input", "sleitnick/input@2.3.0"], ["Knit", "sleitnick/knit@1.7.0"], ["Promise", "evaera/promise@4.0.0"]]
 
 [[package]]
 name = "sleitnick/comm"
@@ -21,6 +21,11 @@ dependencies = [["Option", "sleitnick/option@1.0.5"], ["Promise", "evaera/promis
 name = "sleitnick/component"
 version = "2.4.8"
 dependencies = [["Promise", "evaera/promise@4.0.0"], ["Signal", "sleitnick/signal@2.0.1"], ["Symbol", "sleitnick/symbol@2.0.1"], ["Trove", "sleitnick/trove@1.1.0"]]
+
+[[package]]
+name = "sleitnick/input"
+version = "2.3.0"
+dependencies = [["Signal", "sleitnick/signal@2.0.1"], ["Trove", "sleitnick/trove@1.1.0"]]
 
 [[package]]
 name = "sleitnick/knit"
