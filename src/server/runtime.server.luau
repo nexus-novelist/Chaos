@@ -16,6 +16,9 @@ function InitPlayer(player: Player)
 	TeamService:InitPlayer(player)
 	task.wait(5)
 	TeamService:SetPlayerTeam(player, 0)
+	player.CharacterAdded:Connect(function(character)
+		character.Humanoid.WalkSpeed = 14
+	end)
 end
 
 function DeinitPlayer(player: Player)

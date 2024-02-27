@@ -29,7 +29,7 @@ function TeamService:DeinitPlayer(player: Player)
 end
 
 function TeamService:GetPlayerTeam(player: Player)
-	local playerTable = Utils.findPlayerInTable(player, self.players)
+	local playerTable = self.players[Utils.findPlayerInTable(player, self.players)][player]
 	assert(playerTable, "Player not found in player teams registry!")
 
 	return playerTable["Team"]
@@ -46,10 +46,24 @@ function TeamService:SetPlayerTeam(player: Player, newTeam)
 	end
 end
 
+function TeamService:ShootCharacter(player: Player, victim)
+	local playerTeam = TeamService:GetPlayerTeam(player)
+	assert(playerTeam == "Murderrers" or playerTeam == "Sheriffs", "Attempted shooting without gun!")
+	assert(victim, "Victim is nil!")
+	local victimHumanoid = victim:FindFirstChildWhichIsA("Humanoid")
+	if victimHumanoid then
+		victimHumanoid.Health = 0
+	end
+end
+
 --#region Client methods
 
 function TeamService.Client:GetTeam(player: Player)
 	return TeamService:GetPlayerTeam(player)
+end
+
+function TeamService.Client:ShootCharacter(player: Player, victim: Player)
+	TeamService:ShootCharacter(player, victim)
 end
 
 return TeamService

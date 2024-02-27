@@ -15,27 +15,54 @@ local TeamController = Knit.CreateController({
 	Name = "TeamController",
 })
 
-function TeamController:KnitInit()
+function TeamController:KnitStart()
 	local TeamService = Knit.GetService("TeamService")
 	self.team = "Spectators"
 
 	self.rayParams = RaycastParams.new()
 	self.rayParams.FilterType = Enum.RaycastFilterType.Exclude
 
+	self.highlight = Instance.new("Highlight")
+
 	TeamService.TeamChanged:Connect(function(newTeam)
 		TeamController:TeamChanged(newTeam)
 	end)
 
-	RunService.PreRender:Connect(function(dt)
+	Mouse.LeftDown:Connect(function()
+		if self.highlight.Parent then
+			TeamService:ShootCharacter(self.highlight.Parent)
+		end
+	end)
+
+	RunService.PreRender:Connect(function()
+		local hum = Utils.GetHumanoid(player)
 		if Keyboard:IsKeyDown(Enum.KeyCode.LeftShift) then
 			self.rayParams.FilterDescendantsInstances = { player.Character }
 			if self.team == "Murderrers" or self.team == "Sheriffs" then
+				if hum then
+					hum.WalkSpeed = 14
+				end
 				local ray = Mouse:Raycast(self.rayParams, 75)
 				if ray and ray.Instance then
 					self:AimAt(ray)
+					if ray.Instance.Parent:FindFirstChildWhichIsA("Humanoid") then
+						self.highlight.Parent = ray.Instance.Parent
+					else
+						self.highlight.Parent = nil
+					end
+				else
+					self.highlight.Parent = nil
 				end
 			else
-				print("Player is running!")
+				self.highlight.Parent = nil
+				if hum then
+					hum.WalkSpeed = 22
+				end
+			end
+		else
+			self.highlight.Parent = nil
+			if hum then
+				hum.WalkSpeed = 14
 			end
 		end
 	end)
