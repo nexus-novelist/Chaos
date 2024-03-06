@@ -1,6 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage.Packages.Knit)
+local Chance = require(ReplicatedStorage.Packages.Vendor.Chance)
 local Utils = require(ReplicatedStorage.Shared.utils)
 
 local TeamService = Knit.CreateService({
@@ -69,7 +70,40 @@ function TeamService:ShootCharacter(player: Player, victim)
 			else
 				player.Character.Humanoid.Health = 0
 			end
+		elseif Utils.findPlayerInTable(player, self.players)[player].Team == self.teams[2] then
+			player.Character.Humanoid.Health = 0
 		end
+	end
+end
+
+function TeamService:StartGame()
+	assert(#Players:GetPlayers() >= 3, "Not enough players to start a game")
+	local murdererAmount = #Players:GetPlayers() <= 5 and 1 or 3
+	local sherrifAmount = 1
+	local playerChances = {}
+	for _, player in Players:GetPlayers() do
+		playerChances[player] = 100 / #Players:GetPlayers()
+	end
+
+	local chance = Chance.new(playerChances)
+	for _ = 1, murdererAmount do
+		local player = chance:Run()
+		print(player.Name .. " is a murderer")
+		playerChances[player] = nil
+		self:SetPlayerTeam(player, 0)
+	end
+
+	chance = Chance.new(playerChances)
+	for _ = 1, sherrifAmount do
+		local player = chance:Run()
+		print(player.Name .. " is a sherrif")
+		playerChances[player] = nil
+		self:SetPlayerTeam(player, 1)
+	end
+
+	for player, _ in playerChances do
+		print(player.Name .. " is a Hider")
+		self:SetPlayerTeam(player, 2)
 	end
 end
 

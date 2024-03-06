@@ -7,11 +7,21 @@ local Settings = require(ReplicatedStorage.Shared.settings)
 
 Knit.AddServices(script.Parent.services)
 
-Knit.Start()
-	:andThen(function()
-		print("knit started on server!")
-	end)
-	:catch(warn)
+function StartGame()
+	while true do
+		if #Players:GetPlayers() >= 3 then
+			print("Starting in 10 seconds!")
+			task.wait(10)
+			print("Started with " .. #Players:GetPlayers() .. " players")
+			local TeamService = Knit.GetService("TeamService")
+			TeamService:StartGame()
+			print("Starting new game in 20 seconds!")
+			task.wait(20)
+			print("new game starting soon!")
+		end
+		task.wait(1)
+	end
+end
 
 function InitChar(character)
 	assert(character, "Character is nil")
@@ -23,8 +33,6 @@ function InitPlayer(player: Player)
 	local TeamService = Knit.GetService("TeamService")
 	TeamService:InitPlayer(player)
 	player.CharacterAdded:Connect(InitChar)
-	task.wait(5)
-	TeamService:SetPlayerTeam(player, 3)
 end
 
 function DeinitPlayer(player: Player)
@@ -34,3 +42,10 @@ end
 
 Players.PlayerAdded:Connect(InitPlayer)
 Players.PlayerRemoving:Connect(DeinitPlayer)
+
+Knit.Start()
+	:andThen(function()
+		print("knit started on server!")
+		StartGame()
+	end)
+	:catch(warn)

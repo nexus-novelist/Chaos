@@ -5,6 +5,18 @@ function utils.findPlayerInTable(player: Player, t: table): number
 	for index, value in t do
 		if value[player] then
 			r = index
+			break
+		end
+	end
+	return r
+end
+
+function utils.findInstanceInTable(instance: Instance, t: table): number
+	local r = 0
+	for index, _ in t do
+		r += 1
+		if index == instance then
+			break
 		end
 	end
 	return r
