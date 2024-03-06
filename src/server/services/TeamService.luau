@@ -15,7 +15,7 @@ function TeamService:KnitInit()
 	self.teams = {
 		[0] = "Murderrers",
 		[1] = "Sheriffs",
-		[2] = "Survivors",
+		[2] = "Hiders",
 		[3] = "Spectators",
 	}
 
@@ -64,6 +64,7 @@ function TeamService:ShootCharacter(player: Player, victim)
 				else
 					self.players[Utils.findPlayerInTable(player, self.players)][player].ShotsLeft -= 1
 					self.Client.BlindPlayer:Fire(player)
+					player.Character.Humanoid.WalkSpeed = 0
 				end
 			else
 				player.Character.Humanoid.Health = 0

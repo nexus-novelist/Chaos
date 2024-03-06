@@ -5,6 +5,7 @@ local Input = require(ReplicatedStorage.Packages.Input)
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
 local Utils = require(ReplicatedStorage.Shared.utils)
+local Settings = require(ReplicatedStorage.Shared.settings)
 
 local Keyboard = Input.Keyboard.new()
 local Mouse = Input.Mouse.new()
@@ -26,12 +27,20 @@ function TeamController:KnitStart()
 	self.highlight.DepthMode = Enum.HighlightDepthMode.Occluded
 	self.highlight.FillTransparency = 1
 
+	self.isAiming = false
+	self.canAim = true
+	self.isBlinded = false
+
 	TeamService.TeamChanged:Connect(function(newTeam)
 		TeamController:TeamChanged(newTeam)
 	end)
 
 	TeamService.BlindPlayer:Connect(function()
-		print("Blinded")
+		self.isBlinded = true
+		self.canAim = false
+		task.wait(Settings.BlindTime)
+		self.canAim = true
+		self.isBlinded = false
 	end)
 
 	Mouse.LeftDown:Connect(function()
@@ -44,9 +53,9 @@ function TeamController:KnitStart()
 		local hum = Utils.GetHumanoid(player)
 		if Keyboard:IsKeyDown(Enum.KeyCode.LeftShift) then
 			self.rayParams.FilterDescendantsInstances = { player.Character }
-			if self.team == "Murderrers" or self.team == "Sheriffs" then
+			if (self.team == "Murderrers" or self.team == "Sheriffs") and self.canAim then
 				if hum then
-					hum.WalkSpeed = 14
+					hum.WalkSpeed = Settings.WalkSpeed
 				end
 				local ray = Mouse:Raycast(self.rayParams, 75)
 				if ray and ray.Instance then
@@ -62,13 +71,13 @@ function TeamController:KnitStart()
 			else
 				self.highlight.Parent = nil
 				if hum then
-					hum.WalkSpeed = 22
+					hum.WalkSpeed = Settings.RunSpeed
 				end
 			end
 		else
 			self.highlight.Parent = nil
 			if hum then
-				hum.WalkSpeed = 14
+				hum.WalkSpeed = Settings.WalkSpeed
 			end
 		end
 	end)

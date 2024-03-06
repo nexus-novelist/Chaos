@@ -9,8 +9,8 @@
       },
       "Packages": {
         "$path": "Packages",
-        "Roact": {
-          "$path": "roact"
+        "Vendor": {
+          "$path": "vendor"
         }
       }
     },

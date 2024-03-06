@@ -3,6 +3,8 @@ local Players = game:GetService("Players")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
+local Settings = require(ReplicatedStorage.Shared.settings)
+
 Knit.AddServices(script.Parent.services)
 
 Knit.Start()
@@ -11,14 +13,18 @@ Knit.Start()
 	end)
 	:catch(warn)
 
+function InitChar(character)
+	assert(character, "Character is nil")
+	character.Humanoid.WalkSpeed = Settings.WalkSpeed
+	character.Humanoid.JumpPower = 0
+end
+
 function InitPlayer(player: Player)
 	local TeamService = Knit.GetService("TeamService")
 	TeamService:InitPlayer(player)
+	player.CharacterAdded:Connect(InitChar)
 	task.wait(5)
-	TeamService:SetPlayerTeam(player, 0)
-	player.CharacterAdded:Connect(function(character)
-		character.Humanoid.WalkSpeed = 14
-	end)
+	TeamService:SetPlayerTeam(player, 3)
 end
 
 function DeinitPlayer(player: Player)

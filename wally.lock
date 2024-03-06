@@ -3,6 +3,11 @@
 registry = "test"
 
 [[package]]
+name = "elttob/fusion"
+version = "0.2.0"
+dependencies = []
+
+[[package]]
 name = "evaera/promise"
 version = "4.0.0"
 dependencies = []
@@ -10,7 +15,7 @@ dependencies = []
 [[package]]
 name = "nexus-novelist/chaos"
 version = "0.1.0"
-dependencies = [["Component", "sleitnick/component@2.4.8"], ["Input", "sleitnick/input@2.3.0"], ["Knit", "sleitnick/knit@1.7.0"], ["Promise", "evaera/promise@4.0.0"]]
+dependencies = [["Component", "sleitnick/component@2.4.8"], ["Input", "sleitnick/input@2.3.0"], ["Knit", "sleitnick/knit@1.7.0"], ["Promise", "evaera/promise@4.0.0"], ["fusion", "elttob/fusion@0.2.0"]]
 
 [[package]]
 name = "sleitnick/comm"
