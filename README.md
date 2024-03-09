@@ -9,7 +9,7 @@ FOR THE FIRST TIME
 ```bash
 rojo build -o "Chaos.rbxlx"
 ```
-EVERY OTHER TIME
+EVERY OTHER TIME (to export assets into the file system)
 ```bash
 ./build.bat
 ```

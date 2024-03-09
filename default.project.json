@@ -12,6 +12,9 @@
         "Vendor": {
           "$path": "vendor"
         }
+      },
+      "Assets": {
+        "$path": "assets/shared"
       }
     },
 
@@ -47,7 +50,24 @@
         "Brightness": 2,
         "GlobalShadows": true,
         "Outlines": false,
-        "Technology": "Voxel"
+        "Technology": "Future"
+      },
+      "Atmosphere": {
+        "$className": "Atmosphere",
+        "$properties": {
+          "Density": 0.4
+        }
+      },
+      "Sky": {
+        "$className": "Sky",
+        "$properties": {
+          "SkyboxBk": "http://www.roblox.com/asset/?id=158516797",
+          "SkyboxDn": "http://www.roblox.com/asset/?id=158516788",
+          "SkyboxFt": "http://www.roblox.com/asset/?id=158516797",
+          "SkyboxLf": "http://www.roblox.com/asset/?id=158516797",
+          "SkyboxRt": "http://www.roblox.com/asset/?id=158516797",
+          "SkyboxUp": "http://www.roblox.com/asset/?id=158516792"
+        }
       }
     },
     "SoundService": {

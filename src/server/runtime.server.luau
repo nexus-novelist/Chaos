@@ -8,16 +8,11 @@ local Settings = require(ReplicatedStorage.Shared.settings)
 Knit.AddServices(script.Parent.services)
 
 function StartGame()
+	local TeamService = Knit.GetService("TeamService")
 	while true do
-		if #Players:GetPlayers() >= 3 then
-			print("Starting in 10 seconds!")
-			task.wait(10)
+		while #Players:GetPlayers() >= Settings.MinPlayers and not TeamService:ShouldGameEnd() do
 			print("Started with " .. #Players:GetPlayers() .. " players")
-			local TeamService = Knit.GetService("TeamService")
 			TeamService:StartGame()
-			print("Starting new game in 20 seconds!")
-			task.wait(20)
-			print("new game starting soon!")
 		end
 		task.wait(1)
 	end
@@ -27,6 +22,12 @@ function InitChar(character)
 	assert(character, "Character is nil")
 	character.Humanoid.WalkSpeed = Settings.WalkSpeed
 	character.Humanoid.JumpPower = 0
+	local c --death connection
+	c = character.Humanoid.Died:Connect(function()
+		local TeamService = Knit.GetService("TeamService")
+		TeamService:SetPlayerTeam(Players:GetPlayerFromCharacter(character), 3) --after player dies set his team to spectator
+		c:Disconnect()
+	end)
 end
 
 function InitPlayer(player: Player)
